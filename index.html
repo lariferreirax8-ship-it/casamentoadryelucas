@@ -90,7 +90,7 @@ padding:20px;
 border-radius:15px;
 text-align:center;
 color:#5A3E36;
-transition:0.3s;
+position:relative;
 }
 
 button{
@@ -120,35 +120,27 @@ border:1px solid #ccc;
 width:100%;
 }
 
-/* 🔥 LOADING */
+/* LOADING */
 .loading{
 opacity:0.6;
 pointer-events:none;
 }
 
-.loading::after{
-content:"Processando...";
-display:block;
-margin-top:10px;
-font-size:12px;
-color:#888;
-}
-
-/* 🎉 SUCESSO */
-.sucesso{
-animation:sucessoAnim 0.8s ease forwards;
-}
-
-@keyframes sucessoAnim{
-0%{transform:scale(0.9);opacity:0;}
-50%{transform:scale(1.05);}
-100%{transform:scale(1);opacity:1;}
-}
-
-.sucesso-msg{
-font-size:18px;
-color:#B85C3B;
-margin-top:10px;
+/* CONFIRMAÇÃO */
+.confirmado{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-size:20px;
+border-radius:15px;
+animation:fade 0.5s ease;
 }
 </style>
 </head>
@@ -172,11 +164,12 @@ margin-top:10px;
 <script>
 const supabaseClient = supabase.createClient(
   "https://lrjdlnmfrqmmlgrsgjwq.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "SUA_PUBLIC_ANON_KEY_AQUI"
 );
 
 const chavePix="44988084494";
 const numero="5544988084494";
+
 
 
 /* COLE SUA LISTA AQUI */
@@ -349,13 +342,13 @@ for(const cat of categorias){
     .from('presentes')
     .select('*')
     .eq('id', id)
-    .single();
+    .maybeSingle();
 
   const card=document.createElement('div');
   card.className='card';
 
   if(data){
-   card.innerHTML=`💖 Já comprado por ${data.nome}`;
+   card.innerHTML=`💖 Já comprado por <b>${data.nome}</b>`;
   }else{
    card.innerHTML=`
     <div id="main-${id}">
@@ -367,8 +360,15 @@ for(const cat of categorias){
 
     <div class="pix" id="pix-${id}">
       <p><b>PIX:</b> ${chavePix}</p>
+
+      <p style="font-size:0.9rem;color:#666;">
+      💖 Após realizar o PIX, clique em <b>Confirmar</b> para registrar seu nome.<br>
+      O presente será marcado como escolhido e ficará indisponível para outros convidados.
+      </p>
+
       <input id="nome-${id}" placeholder="Seu nome">
-      <button class="btn-wpp" onclick="comprar('${id}','${p.nome}', event)">Confirmar</button>
+
+      <button class="btn-wpp" id="btn-${id}" onclick="comprar('${id}','${p.nome}')">Confirmar</button>
       <button class="btn-voltar" onclick="voltar('${id}')">Voltar</button>
     </div>
    `;
@@ -392,46 +392,48 @@ document.getElementById('main-'+id).style.display='block';
 document.getElementById('pix-'+id).style.display='none';
 }
 
-window.comprar=async(id,nomePresente,event)=>{
+window.comprar=async(id,nomePresente)=>{
 
  const nome=document.getElementById('nome-'+id).value;
  if(!nome) return alert('Digite seu nome');
 
- const botao = event.target;
- const card = botao.closest('.card');
+ const btn=document.getElementById('btn-'+id);
+ btn.innerText="Comprando...";
+ btn.classList.add('loading');
 
- botao.innerText="Comprando...";
- botao.disabled=true;
- card.classList.add('loading');
+ // 🔥 VERIFICA SE JÁ FOI COMPRADO
+ const { data: existente } = await supabaseClient
+   .from('presentes')
+   .select('*')
+   .eq('id', id)
+   .maybeSingle();
 
- // 🔥 abre WhatsApp
- const url = `https://wa.me/${numero}?text=${encodeURIComponent(
-  'Oii, sou '+nome+' e presenteei: '+nomePresente
- )}`;
- window.open(url, '_blank');
-
- try{
-  await supabaseClient.from('presentes').insert([
-    { id: id, nome: nome }
-  ]);
-
-  card.classList.remove('loading');
-  card.classList.add('sucesso');
-
-  card.innerHTML=`
-    <div>💍</div>
-    <div class="sucesso-msg">
-      Presente confirmado!<br>
-      Obrigado, ${nome} 💖
-    </div>
-  `;
-
-  setTimeout(()=>location.reload(),2000);
-
- }catch(e){
-  alert("Erro ao salvar 😢");
-  location.reload();
+ if(existente){
+   alert("Esse presente já foi escolhido 💖");
+   location.reload();
+   return;
  }
+
+ // SALVA
+ await supabaseClient.from('presentes').insert([
+  { id: id, nome: nome }
+ ]);
+
+ // ANIMAÇÃO
+ const card=btn.closest('.card');
+ const ok=document.createElement('div');
+ ok.className='confirmado';
+ ok.innerHTML="💍 Confirmado!";
+ card.appendChild(ok);
+
+ // WHATSAPP
+ setTimeout(()=>{
+  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(
+   'Oii, sou '+nome+' e presenteei: '+nomePresente
+  )}`,'_blank');
+ },800);
+
+ setTimeout(()=>location.reload(),1500);
 }
 
 render();
