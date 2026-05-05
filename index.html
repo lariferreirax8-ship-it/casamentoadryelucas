@@ -22,7 +22,6 @@ height:100vh;
 overflow:hidden;
 }
 
-/* IMAGEM */
 .hero img{
 width:100%;
 height:100%;
@@ -30,7 +29,7 @@ object-fit:cover;
 display:block;
 }
 
-/* OVERLAY */
+/* overlay */
 .hero::after{
 content:"";
 position:absolute;
@@ -71,15 +70,15 @@ margin-top:10px;
 animation:fadeUp 2s ease;
 }
 
-/* ANIMAÇÕES */
+/* ANIMAÇÃO CORRIGIDA (CENTRO) */
 @keyframes fadeUp{
 from{
 opacity:0;
-transform:translate(-50%,-30%);
+transform:translate(-50%,-50%) translateY(30px);
 }
 to{
 opacity:1;
-transform:translate(-50%,-50%);
+transform:translate(-50%,-50%) translateY(0);
 }
 }
 
@@ -94,20 +93,19 @@ transform:scale(1);
 }
 }
 
-/* 📱 MOBILE PERFEITO */
+/* MOBILE */
 @media (max-width:768px){
 
 .hero{
 height:auto;
 }
 
-/* imagem sem corte */
 .hero img{
 height:auto;
 object-fit:contain;
 }
 
-/* TEXTO AJUSTADO */
+/* TEXTO PERFEITO */
 .hero-text{
 top:50%;
 left:50%;
@@ -115,7 +113,6 @@ transform:translate(-50%,-50%);
 width:85%;
 }
 
-/* TAMANHO PERFEITO */
 .hero-text h1{
 font-size:clamp(22px,6vw,28px);
 line-height:1.2;
