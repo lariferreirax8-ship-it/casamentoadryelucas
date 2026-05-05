@@ -29,7 +29,6 @@ object-fit:cover;
 display:block;
 }
 
-/* overlay */
 .hero::after{
 content:"";
 position:absolute;
@@ -37,15 +36,10 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:linear-gradient(
-to bottom,
-rgba(0,0,0,0.3),
-rgba(0,0,0,0.2),
-rgba(0,0,0,0.5)
-);
+background:linear-gradient(to bottom,rgba(0,0,0,0.3),rgba(0,0,0,0.5));
 }
 
-/* CENTRALIZAÇÃO FIXA (NÃO ANIMAR ISSO) */
+/* CENTRAL FIXO */
 .hero-text{
 position:absolute;
 top:50%;
@@ -56,41 +50,34 @@ color:#fff;
 width:90%;
 }
 
-/* TÍTULO */
+/* TITULO */
 .hero-text h1{
 font-size:70px;
 margin:0;
-text-shadow:0 10px 30px rgba(0,0,0,0.6);
-animation:zoomIn 1.2s ease;
+animation:fadeCenter 1.2s ease;
 }
 
-/* SUBTÍTULO */
+/* SUBTITULO (NÃO ANIMA O P) */
 .hero-text p{
 font-size:20px;
 margin-top:10px;
-animation:fadeUp 1.5s ease;
 }
 
-/* ANIMAÇÕES CORRETAS */
-@keyframes fadeUp{
+/* ANIMAÇÃO APLICADA NO SPAN */
+.fade{
+display:inline-block;
+animation:fadeCenter 1.5s ease;
+}
+
+/* 🔥 ANIMAÇÃO REAL CENTRAL */
+@keyframes fadeCenter{
 from{
 opacity:0;
-margin-top:30px;
+transform:translateY(20px);
 }
 to{
 opacity:1;
-margin-top:10px;
-}
-}
-
-@keyframes zoomIn{
-from{
-opacity:0;
-transform:scale(0.8);
-}
-to{
-opacity:1;
-transform:scale(1);
+transform:translateY(0);
 }
 }
 
@@ -106,18 +93,16 @@ height:auto;
 object-fit:contain;
 }
 
-/* TEXTO */
 .hero-text{
 width:85%;
 }
 
 .hero-text h1{
-font-size:clamp(22px,6vw,28px);
-line-height:1.2;
+font-size:24px;
 }
 
 .hero-text p{
-font-size:clamp(12px,3.5vw,14px);
+font-size:13px;
 }
 }
 
@@ -176,8 +161,10 @@ width:100%;
 <div class="hero">
   <img src="banner.png">
   <div class="hero-text">
-    <h1>Adryelli & Lucas 💍</h1>
-    <p>Nossa lista de casamento</p>
+    <h1><span class="fade">Adryelli & Lucas 💍</span></h1>
+
+    <!-- 🔥 AGORA CORRETO -->
+    <p><span class="fade">Nossa lista de casamento</span></p>
   </div>
 </div>
 
@@ -186,6 +173,8 @@ width:100%;
 <script>
 const chavePix="44988084494";
 const numero="5544988084494";
+
+
 
 /* COLE SUA LISTA AQUI */
 const lista=[
