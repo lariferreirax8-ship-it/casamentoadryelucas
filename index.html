@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adry & Lucas 💍</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--fundo:#B85C3B;
+--card:#F6EDE7;
+}
+
+body{
+margin:0;
+font-family:'Playfair Display', serif;
+background:var(--fundo);
+}
+
+.hero{
+position:relative;
+width:100%;
+}
+
+.hero img{
+width:100%;
+display:block;
+}
+
+.hero-text{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+color:#fff;
+}
+
+.categoria{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:15px;
+text-align:center;
+color:#5A3E36;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:30px;
+margin-top:10px;
+cursor:pointer;
+}
+
+.btn{ background:#B85C3B; color:#fff; }
+.btn-wpp{ background:#25D366; color:#fff; }
+.btn-voltar{ background:#ccc; }
+
+/* PIX SIMPLES E FUNCIONAL */
+.pix{
+display:none;
+flex-direction:column;
+gap:10px;
+margin-top:10px;
+color:#5A3E36;
+}
+
+.pix p{
+margin:6px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+  <img src="banner.png">
+  <div class="hero-text">
+    <h1>Adryelli & Lucas 💍</h1>
+    <p>Nossa lista de casamento</p>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<script>
+
+const chavePix="44988084494";
+const numero="5544988084494";
+
+/* COLE SUA LISTA AQUI */
+const lista=[
+// CASA & CONFORTO
+{cat:"CASA & CONFORTO",emoji:"🛏️",nome:"Jogo de lençol digno de hotel 5 estrelas",valor:"R$180"},
+{cat:"CASA & CONFORTO",emoji:"🍳",nome:"Frigideira antiaderente da paz",valor:"R$120"},
+{cat:"CASA & CONFORTO",emoji:"☕",nome:"Cafeteira para sobreviver às segundas",valor:"R$220"},
+{cat:"CASA & CONFORTO",emoji:"🍽️",nome:"Jogo de pratos “visita chegando”",valor:"R$200"},
+{cat:"CASA & CONFORTO",emoji:"🧼",nome:"Kit limpeza premium",valor:"R$130"},
+{cat:"CASA & CONFORTO",emoji:"🚿",nome:"Chuveiro top",valor:"R$150"},
+{cat:"CASA & CONFORTO",emoji:"🕯️",nome:"Velas aromáticas clima romance",valor:"R$110"},
+{cat:"CASA & CONFORTO",emoji:"🪴",nome:"Plantinhas decorativas",valor:"R$100"},
+{cat:"CASA & CONFORTO",emoji:"📺",nome:"Suporte de TV",valor:"R$140"},
+{cat:"CASA & CONFORTO",emoji:"🧺",nome:"Cesto de roupas elegante",valor:"R$120"},
+{cat:"CASA & CONFORTO",emoji:"🛋️",nome:"Almofadas decorativas",valor:"R$130"},
+{cat:"CASA & CONFORTO",emoji:"🪑",nome:"Cadeira confortável",valor:"R$350"},
+{cat:"CASA & CONFORTO",emoji:"🪞",nome:"Espelho decorativo",valor:"R$180"},
+{cat:"CASA & CONFORTO",emoji:"🪟",nome:"Cortinas novas",valor:"R$220"},
+{cat:"CASA & CONFORTO",emoji:"💡",nome:"Luminária moderna",valor:"R$160"},
+{cat:"CASA & CONFORTO",emoji:"🔌",nome:"Kit extensões e tomadas",valor:"R$110"},
+{cat:"CASA & CONFORTO",emoji:"🛠️",nome:"Kit ferramentas básico",valor:"R$200"},
+{cat:"CASA & CONFORTO",emoji:"🧯",nome:"Kit emergência cozinha",valor:"R$140"},
+{cat:"CASA & CONFORTO",emoji:"🧊",nome:"Organizadores de geladeira",valor:"R$120"},
+{cat:"CASA & CONFORTO",emoji:"🛏️",nome:"Edredom estilo nuvem",valor:"R$250"},
+
+// COZINHA & UTILIDADES
+{cat:"COZINHA & UTILIDADES",emoji:"🍳",nome:"Air fryer salvadora",valor:"R$350"},
+{cat:"COZINHA & UTILIDADES",emoji:"🍚",nome:"Panela elétrica",valor:"R$220"},
+{cat:"COZINHA & UTILIDADES",emoji:"🥤",nome:"Liquidificador potente",valor:"R$200"},
+{cat:"COZINHA & UTILIDADES",emoji:"🍞",nome:"Torradeira charmosa",valor:"R$150"},
+{cat:"COZINHA & UTILIDADES",emoji:"🧊",nome:"Máquina de gelo",valor:"R$400"},
+{cat:"COZINHA & UTILIDADES",emoji:"🍷",nome:"Taças elegantes",valor:"R$130"},
+{cat:"COZINHA & UTILIDADES",emoji:"🧀",nome:"Kit tábua de frios",valor:"R$180"},
+{cat:"COZINHA & UTILIDADES",emoji:"🍲",nome:"Jogo de panelas",valor:"R$500"},
+{cat:"COZINHA & UTILIDADES",emoji:"🍽️",nome:"Talheres completos",valor:"R$250"},
+{cat:"COZINHA & UTILIDADES",emoji:"🧴",nome:"Dispenser cozinha",valor:"R$120"},
+
+// EXPERIÊNCIAS & COMIDA
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍣",nome:"Rodízio japonês premium",valor:"R$180"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍕",nome:"Pizza de sexta sagrada (1 mês)",valor:"R$200"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍔",nome:"Vale hambúrguer artesanal",valor:"R$120"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍝",nome:"Noite italiana patrocinada",valor:"R$160"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍰",nome:"Bolo de domingo",valor:"R$120"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🥂",nome:"Kit drinks",valor:"R$180"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍷",nome:"Vinho para visitas",valor:"R$150"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍿",nome:"Cinema em casa completo",valor:"R$140"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🍫",nome:"Estoque de chocolate",valor:"R$130"},
+{cat:"EXPERIÊNCIAS & COMIDA",emoji:"🧀",nome:"Tábua premium",valor:"R$200"},
+
+// DIVERTIDOS & CRIATIVOS
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"💸",nome:"Fundo discussão resolvida com comida",valor:"R$150"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🧠",nome:"Terapia de casal preventiva",valor:"R$300"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"💤",nome:"Vale cochilo sem culpa",valor:"R$100"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🍕",nome:"Pizza pós-briga",valor:"R$120"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🎲",nome:"Noite de jogos",valor:"R$140"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"📦",nome:"Caixa de coisas aleatórias",valor:"R$110"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"📺",nome:"Maratona infinita",valor:"R$150"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🧃",nome:"Detox pós exageros",valor:"R$120"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🍔",nome:"Dia do lixo oficial",valor:"R$130"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🧾",nome:"Fundo boletos inesperados",valor:"R$200"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🎤",nome:"Karaokê do casal",valor:"R$180"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🕺",nome:"Aula de dança",valor:"R$200"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🎨",nome:"Tentativa de arte juntos",valor:"R$120"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🧩",nome:"Quebra-cabeça difícil",valor:"R$130"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🧻",nome:"Estoque papel higiênico",valor:"R$100"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"😂",nome:"Fundo briga resolvida",valor:"R$150"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🍫",nome:"Chocolate pós TPM",valor:"R$120"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"🍺",nome:"Cerveja pós estresse",valor:"R$130"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"💤",nome:"Dia de preguiça",valor:"R$100"},
+{cat:"DIVERTIDOS & CRIATIVOS",emoji:"📱",nome:"Detox de celular",valor:"R$110"},
+
+// VIDA ADULTA
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"⛽",nome:"Tanque cheio",valor:"R$150"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🚗",nome:"Lavagem completa carro",valor:"R$120"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🧾",nome:"Contas do mês",valor:"R$200"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"💡",nome:"Conta de luz",valor:"R$120"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🚿",nome:"Conta de água",valor:"R$110"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🧺",nome:"Lavanderia terceirizada",valor:"R$180"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🧼",nome:"Faxina profissional",valor:"R$250"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🛠️",nome:"Pequenos reparos",valor:"R$200"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🔐",nome:"Segurança da casa",valor:"R$180"},
+{cat:"VIDA ADULTA & UTILIDADES",emoji:"🧯",nome:"Kit segurança",valor:"R$140"},
+
+// LAZER
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎮",nome:"Jogo novo",valor:"R$250"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎧",nome:"Fone de ouvido",valor:"R$180"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"📚",nome:"Livros",valor:"R$120"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎬",nome:"Assinaturas streaming",valor:"R$150"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🍿",nome:"Pipoca gourmet anual",valor:"R$120"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎲",nome:"Jogos de tabuleiro",valor:"R$180"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎧",nome:"Caixa de som",valor:"R$250"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"📺",nome:"Upgrade entretenimento",valor:"R$300"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎮",nome:"Controle extra",valor:"R$200"},
+{cat:"LAZER & ENTRETENIMENTO",emoji:"🎥",nome:"Noite cinema premium",valor:"R$150"},
+
+// VIAGENS
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🏖️",nome:"Viagem curta",valor:"R$500"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🎡",nome:"Passeio divertido",valor:"R$150"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🧖",nome:"Dia de spa",valor:"R$300"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"💆",nome:"Massagem relaxante",valor:"R$250"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🏕️",nome:"Camping romântico",valor:"R$200"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🚤",nome:"Passeio especial",valor:"R$300"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🍽️",nome:"Restaurante chique",valor:"R$250"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🎢",nome:"Parque de diversões",valor:"R$180"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🗺️",nome:"Passeio surpresa",valor:"R$200"},
+{cat:"EXPERIÊNCIAS & VIAGENS",emoji:"🏨",nome:"Diária simples hotel",valor:"R$400"},
+
+// PREMIUM
+{cat:"PRESENTES PREMIUM",emoji:"✈️",nome:"Cota lua de mel",valor:"R$1000"},
+{cat:"PRESENTES PREMIUM",emoji:"🏨",nome:"Hotel 2 diárias",valor:"R$1500"},
+{cat:"PRESENTES PREMIUM",emoji:"📺",nome:"TV nova",valor:"R$2000"},
+{cat:"PRESENTES PREMIUM",emoji:"🛋️",nome:"Sofá confortável",valor:"R$2500"},
+{cat:"PRESENTES PREMIUM",emoji:"🛏️",nome:"Cama completa",valor:"R$3000"},
+{cat:"PRESENTES PREMIUM",emoji:"🍷",nome:"Adega climatizada",valor:"R$1200"},
+{cat:"PRESENTES PREMIUM",emoji:"🎮",nome:"Videogame",valor:"R$2500"},
+{cat:"PRESENTES PREMIUM",emoji:"💻",nome:"Notebook",valor:"R$3500"},
+{cat:"PRESENTES PREMIUM",emoji:"🚿",nome:"Reforma banheiro",valor:"R$2000"},
+{cat:"PRESENTES PREMIUM",emoji:"🍳",nome:"Cozinha planejada (cota)",valor:"R$2500"},
+
+// EMOCIONAIS
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"💌",nome:"Cartas de amor",valor:"R$100"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"📸",nome:"Álbum de fotos",valor:"R$150"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"🖼️",nome:"Quadros decorativos",valor:"R$200"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"🎞️",nome:"Memórias impressas",valor:"R$120"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"❤️",nome:"Caixa de lembranças",valor:"R$130"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"💑",nome:"Noite romântica",valor:"R$180"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"🕯️",nome:"Kit romance",valor:"R$150"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"💖",nome:"Experiência a dois",valor:"R$250"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"🛌",nome:"Noite perfeita",valor:"R$200"},
+{cat:"EMOCIONAIS & SIMBÓLICOS",emoji:"💫",nome:"Planos futuros",valor:"R$300"},
+
+// PET
+{cat:"PET (AMORA 🐶)",emoji:"🐾",nome:"Caminha luxo da Amora",valor:"R$200"},
+{cat:"PET (AMORA 🐶)",emoji:"🐶",nome:"Ração premium",valor:"R$180"},
+{cat:"PET (AMORA 🐶)",emoji:"🎾",nome:"Brinquedos novos",valor:"R$120"},
+{cat:"PET (AMORA 🐶)",emoji:"🛁",nome:"Banho e tosa",valor:"R$150"},
+{cat:"PET (AMORA 🐶)",emoji:"🦴",nome:"Coleira estilosa",valor:"R$100"},
+{cat:"PET (AMORA 🐶)",emoji:"🍖",nome:"Petiscos gourmet",valor:"R$110"},
+{cat:"PET (AMORA 🐶)",emoji:"🧻",nome:"Tapete higiênico",valor:"R$130"},
+{cat:"PET (AMORA 🐶)",emoji:"💉",nome:"Veterinário checkup",valor:"R$250"},
+{cat:"PET (AMORA 🐶)",emoji:"👕",nome:"Roupa fashion",valor:"R$120"},
+{cat:"PET (AMORA 🐶)",emoji:"🚗",nome:"Caixa transporte",valor:"R$300"},
+{cat:"PET (AMORA 🐶)",emoji:"🧴",nome:"Shampoo pet",valor:"R$90"},
+{cat:"PET (AMORA 🐶)",emoji:"🪮",nome:"Escova de pelos",valor:"R$80"},
+{cat:"PET (AMORA 🐶)",emoji:"🥣",nome:"Comedouro chique",valor:"R$140"},
+{cat:"PET (AMORA 🐶)",emoji:"🌳",nome:"Passeio especial",valor:"R$150"},
+{cat:"PET (AMORA 🐶)",emoji:"❤️",nome:"Plano saúde pet",valor:"R$400"}
+];
+
+const app=document.getElementById('app');
+const categorias=[...new Set(lista.map(i=>i.cat))];
+
+categorias.forEach(cat=>{
+ const sec=document.createElement('div');
+ sec.className='categoria';
+ sec.innerHTML=`<h2>${cat}</h2><div class="grid"></div>`;
+ const grid=sec.querySelector('.grid');
+
+ lista.filter(p=>p.cat===cat).forEach((p,i)=>{
+  const id=cat+i;
+  const comprado=localStorage.getItem(id);
+
+  const card=document.createElement('div');
+  card.className='card';
+
+  if(comprado){
+   card.innerHTML=`
+    <div>💖 Já comprado</div>
+    <div>Por ${comprado}</div>
+   `;
+  }else{
+   card.innerHTML=`
+    <div id="main-${id}">
+      <div>${p.emoji}</div>
+      <h3>${p.nome}</h3>
+      <div>${p.valor}</div>
+      <button class="btn" onclick="abrir('${id}')">Presentear</button>
+    </div>
+
+    <div class="pix" id="pix-${id}">
+      <p><b>PIX:</b> ${chavePix}</p>
+
+      <!-- 🔥 MENSAGEM GARANTIDA -->
+      <div style="margin-top:10px;font-size:14px;">
+      💖 Após realizar o PIX, clique em <b>Confirmar</b> para registrar seu nome.<br>
+      O presente será marcado como escolhido.
+      </div>
+
+      <input id="nome-${id}" placeholder="Seu nome">
+
+      <button class="btn-wpp" onclick="comprar('${id}','${p.nome}')">Confirmar</button>
+      <button class="btn-voltar" onclick="voltar('${id}')">Voltar</button>
+    </div>
+   `;
+  }
+
+  grid.appendChild(card);
+ });
+
+ app.appendChild(sec);
+});
+
+/* 🔥 CONTROLE SIMPLES E INFALÍVEL */
+function abrir(id){
+ document.getElementById('main-'+id).style.display='none';
+ document.getElementById('pix-'+id).style.display='flex';
+}
+
+function voltar(id){
+ document.getElementById('main-'+id).style.display='block';
+ document.getElementById('pix-'+id).style.display='none';
+}
+
+function comprar(id,nomePresente){
+ if(localStorage.getItem(id)){
+  alert('Já foi escolhido 💖');
+  return;
+ }
+
+ const nome=document.getElementById('nome-'+id).value;
+ if(!nome) return alert('Digite seu nome');
+
+ localStorage.setItem(id,nome);
+
+ window.open(`https://wa.me/${numero}?text=${encodeURIComponent(
+ 'Oii, sou '+nome+' e presenteei: '+nomePresente
+ )}`);
+
+ location.reload();
+}
+
+</script>
+
+</body>
+</html>
