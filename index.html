@@ -427,12 +427,14 @@ window.comprar=async(id,nomePresente)=>{
  card.appendChild(ok);
 
 // WHATSAPP (abrir imediatamente para não bloquear)
-window.open(
-  `https://wa.me/${numero}?text=${encodeURIComponent(
-    'Oii, sou ' + nome + ' e presenteei: ' + nomePresente
-  )}`,
-  '_blank'
+const msg = encodeURIComponent(
+  'Oii, sou ' + nome + ' e presenteei: ' + nomePresente
 );
+
+const url = `https://wa.me/${numero}?text=${msg}`;
+
+// abre no celular e PC sem bloqueio
+window.location.href = url;
 
 // depois faz a animação e reload
 setTimeout(() => {
