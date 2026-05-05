@@ -26,29 +26,19 @@ overflow:hidden;
 width:100%;
 height:100%;
 object-fit:cover;
-display:block;
-position:relative;
-z-index:0;
 }
 
-/* 🔥 OVERLAY PERFEITO (SEM BORRAR) */
+/* OVERLAY */
 .overlay{
 position:absolute;
 top:0;
 left:0;
 width:100%;
 height:100%;
-background:linear-gradient(
-to bottom,
-rgba(184,92,59,0.2),
-rgba(184,92,59,0.4),
-rgba(184,92,59,0.7),
-#B85C3B
-);
-z-index:1;
+background:linear-gradient(to bottom, rgba(184,92,59,0.2), rgba(184,92,59,0.6), #B85C3B);
 }
 
-/* TEXTO CENTRAL */
+/* TEXTO */
 .hero-text{
 position:absolute;
 top:50%;
@@ -57,63 +47,30 @@ transform:translate(-50%,-50%);
 text-align:center;
 color:#fff;
 width:90%;
-z-index:2;
 }
 
-/* TÍTULO */
 .hero-text h1{
 font-size:70px;
 margin:0;
-animation:fadeCenter 1.2s ease;
+animation:fade 1.2s ease;
 }
 
-/* SUBTÍTULO */
 .hero-text p{
 font-size:20px;
-margin-top:10px;
+animation:fade 1.8s ease;
 }
 
-/* ANIMAÇÃO CENTRAL */
-.fade{
-display:inline-block;
-animation:fadeCenter 1.5s ease;
-}
-
-@keyframes fadeCenter{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
+@keyframes fade{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
 }
 
 /* MOBILE */
-@media (max-width:768px){
-
-.hero{
-height:auto;
-}
-
-.hero img{
-height:auto;
-object-fit:contain;
-}
-
-.hero-text{
-width:85%;
-}
-
-.hero-text h1{
-font-size:24px;
-line-height:1.2;
-}
-
-.hero-text p{
-font-size:13px;
-}
+@media(max-width:768px){
+.hero{height:auto;}
+.hero img{object-fit:contain;}
+.hero-text h1{font-size:26px;}
+.hero-text p{font-size:14px;}
 }
 
 /* LISTA */
@@ -170,22 +127,26 @@ width:100%;
 
 <div class="hero">
   <img src="banner.png">
-
-  <!-- OVERLAY -->
   <div class="overlay"></div>
 
   <div class="hero-text">
-    <h1><span class="fade">Adryelli & Lucas 💍</span></h1>
-    <p><span class="fade">Nossa lista de casamento</span></p>
+    <h1>Adryelli & Lucas 💍</h1>
+    <p>Nossa lista de casamento</p>
   </div>
 </div>
 
 <div id="app"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <script>
+const supabaseClient = supabase.createClient(
+  "https://lrjdlnmfrqmmlgrsgjwq.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyamRsbm1mcnFtbWxncnNnandxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDMxMTUsImV4cCI6MjA5MzU3OTExNX0.jGYskgHsKFQB9KCYRaDHuP-v4IJi32AEasbHoKErw_o"
+);
+
 const chavePix="44988084494";
 const numero="5544988084494";
-
 
 
 /* COLE SUA LISTA AQUI */
@@ -339,21 +300,32 @@ const lista=[
 const app=document.getElementById('app');
 const categorias=[...new Set(lista.map(i=>i.cat))];
 
-categorias.forEach(cat=>{
+async function render(){
+
+app.innerHTML="";
+
+for(const cat of categorias){
+
  const sec=document.createElement('div');
  sec.className='categoria';
  sec.innerHTML=`<h2>${cat}</h2><div class="grid"></div>`;
  const grid=sec.querySelector('.grid');
 
- lista.filter(p=>p.cat===cat).forEach((p,i)=>{
-  const id=cat+i;
-  const comprado=localStorage.getItem(id);
+ for(const p of lista.filter(i=>i.cat===cat)){
+
+  const id=p.nome;
+
+  const { data } = await supabaseClient
+    .from('presentes')
+    .select('*')
+    .eq('id', id)
+    .single();
 
   const card=document.createElement('div');
   card.className='card';
 
-  if(comprado){
-   card.innerHTML=`💖 Já comprado por ${comprado}`;
+  if(data){
+   card.innerHTML=`💖 Já comprado por ${data.nome}`;
   }else{
    card.innerHTML=`
     <div id="main-${id}">
@@ -367,8 +339,7 @@ categorias.forEach(cat=>{
       <p><b>PIX:</b> ${chavePix}</p>
 
       <div>
-      💖 Após realizar o PIX, clique em <b>Confirmar</b> para registrar seu nome.<br>
-      O presente será marcado como escolhido.
+      💖 Após o PIX clique em confirmar
       </div>
 
       <input id="nome-${id}" placeholder="Seu nome">
@@ -380,31 +351,31 @@ categorias.forEach(cat=>{
   }
 
   grid.appendChild(card);
- });
+ }
 
  app.appendChild(sec);
-});
-
-function abrir(id){
- document.getElementById('main-'+id).style.display='none';
- document.getElementById('pix-'+id).style.display='flex';
 }
 
-function voltar(id){
- document.getElementById('main-'+id).style.display='block';
- document.getElementById('pix-'+id).style.display='none';
 }
 
-function comprar(id,nomePresente){
- if(localStorage.getItem(id)){
-  alert('Já foi escolhido 💖');
-  return;
- }
+window.abrir=(id)=>{
+document.getElementById('main-'+id).style.display='none';
+document.getElementById('pix-'+id).style.display='flex';
+}
+
+window.voltar=(id)=>{
+document.getElementById('main-'+id).style.display='block';
+document.getElementById('pix-'+id).style.display='none';
+}
+
+window.comprar=async(id,nomePresente)=>{
 
  const nome=document.getElementById('nome-'+id).value;
  if(!nome) return alert('Digite seu nome');
 
- localStorage.setItem(id,nome);
+ await supabaseClient.from('presentes').insert([
+  { id: id, nome: nome }
+ ]);
 
  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(
  'Oii, sou '+nome+' e presenteei: '+nomePresente
@@ -412,6 +383,8 @@ function comprar(id,nomePresente){
 
  location.reload();
 }
+
+render();
 </script>
 
 </body>
