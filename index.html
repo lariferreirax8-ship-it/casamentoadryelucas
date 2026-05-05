@@ -426,14 +426,18 @@ window.comprar=async(id,nomePresente)=>{
  ok.innerHTML="💍 Confirmado!";
  card.appendChild(ok);
 
- // WHATSAPP
- setTimeout(()=>{
-  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(
-   'Oii, sou '+nome+' e presenteei: '+nomePresente
-  )}`,'_blank');
- },800);
+// WHATSAPP (abrir imediatamente para não bloquear)
+window.open(
+  `https://wa.me/${numero}?text=${encodeURIComponent(
+    'Oii, sou ' + nome + ' e presenteei: ' + nomePresente
+  )}`,
+  '_blank'
+);
 
- setTimeout(()=>location.reload(),1500);
+// depois faz a animação e reload
+setTimeout(() => {
+  location.reload();
+}, 1500);
 }
 
 render();
