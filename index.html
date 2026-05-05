@@ -19,7 +19,7 @@ font-family:'Playfair Display', serif;
 background:var(--fundo);
 }
 
-/* HERO PERFEITO */
+/* HERO */
 .hero{
 position:relative;
 width:100%;
@@ -30,6 +30,7 @@ align-items:center;
 justify-content:center;
 }
 
+/* IMAGEM */
 .hero img{
 position:absolute;
 width:100%;
@@ -40,6 +41,20 @@ left:0;
 z-index:0;
 }
 
+/* NO CELULAR NÃO CORTA */
+@media (max-width:768px){
+.hero{
+height:auto;
+}
+
+.hero img{
+position:relative;
+height:auto;
+object-fit:contain;
+}
+}
+
+/* OVERLAY */
 .hero::after{
 content:"";
 position:absolute;
@@ -56,23 +71,22 @@ rgba(0,0,0,0.5)
 z-index:1;
 }
 
-/* TEXTO CENTRAL */
+/* TEXTO */
 .hero-text{
 position:relative;
 z-index:2;
 text-align:center;
 color:#fff;
-
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-
 animation:fadeUp 1.5s ease;
+padding:0 15px;
 }
 
 .hero-text h1{
-font-size: clamp(40px, 6vw, 90px);
+font-size:clamp(40px,6vw,90px);
 margin:0;
 letter-spacing:2px;
 text-shadow:0 10px 30px rgba(0,0,0,0.6);
@@ -80,52 +94,33 @@ animation:zoomIn 1.5s ease;
 }
 
 .hero-text p{
-font-size: clamp(14px, 2vw, 24px);
+font-size:clamp(14px,2vw,22px);
 margin-top:10px;
 text-shadow:0 5px 15px rgba(0,0,0,0.5);
-animation:fadeUp 2s ease;
 }
 
-/* ANIMAÇÕES */
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(40px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-@keyframes zoomIn{
-from{
-opacity:0;
-transform:scale(0.8);
-}
-to{
-opacity:1;
-transform:scale(1);
-}
-}
-
-/* MOBILE */
+/* MOBILE TEXTO */
 @media (max-width:768px){
-.hero{
-height:70vh;
-}
-
 .hero-text h1{
-font-size:28px;
-line-height:1.2;
+font-size:26px;
 }
-
 .hero-text p{
 font-size:13px;
 }
 }
 
-/* RESTO */
+/* ANIMAÇÕES */
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(40px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes zoomIn{
+from{opacity:0;transform:scale(0.8);}
+to{opacity:1;transform:scale(1);}
+}
+
+/* LISTA */
 .categoria{
 max-width:1100px;
 margin:40px auto;
@@ -168,8 +163,11 @@ margin-top:10px;
 color:#5A3E36;
 }
 
-.pix p{
-margin:6px 0;
+input{
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+width:100%;
 }
 </style>
 </head>
